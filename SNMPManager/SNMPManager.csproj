@@ -62,30 +62,30 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="AutoDiscoveryForm.cs">
+    <Compile Include="Forms\AutoDiscoveryForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="AutoDiscoveryForm.Designer.cs">
+    <Compile Include="Forms\AutoDiscoveryForm.Designer.cs">
       <DependentUpon>AutoDiscoveryForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="HostAddForm.cs">
+    <Compile Include="Forms\HostAddForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="HostAddForm.Designer.cs">
+    <Compile Include="Forms\HostAddForm.Designer.cs">
       <DependentUpon>HostAddForm.cs</DependentUpon>
     </Compile>
     <Compile Include="Logger.cs" />
-    <Compile Include="MainForm.cs">
+    <Compile Include="Forms\MainForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="MainForm.Designer.cs">
+    <Compile Include="Forms\MainForm.Designer.cs">
       <DependentUpon>MainForm.cs</DependentUpon>
     </Compile>
     <Compile Include="MibObject.cs" />
-    <Compile Include="MIBObjectSetForm.cs">
+    <Compile Include="Forms\MIBObjectSetForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="MIBObjectSetForm.Designer.cs">
+    <Compile Include="Forms\MIBObjectSetForm.Designer.cs">
       <DependentUpon>MIBObjectSetForm.cs</DependentUpon>
     </Compile>
     <Compile Include="Program.cs" />
@@ -94,16 +94,16 @@
     <Compile Include="SNMPHost.cs" />
     <Compile Include="SNMPRequest.cs" />
     <Compile Include="SuperQueue.cs" />
-    <EmbeddedResource Include="AutoDiscoveryForm.resx">
+    <EmbeddedResource Include="Forms\AutoDiscoveryForm.resx">
       <DependentUpon>AutoDiscoveryForm.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="HostAddForm.resx">
+    <EmbeddedResource Include="Forms\HostAddForm.resx">
       <DependentUpon>HostAddForm.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="MainForm.resx">
+    <EmbeddedResource Include="Forms\MainForm.resx">
       <DependentUpon>MainForm.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="MIBObjectSetForm.resx">
+    <EmbeddedResource Include="Forms\MIBObjectSetForm.resx">
       <DependentUpon>MIBObjectSetForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">

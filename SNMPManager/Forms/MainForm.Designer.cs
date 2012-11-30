@@ -46,12 +46,12 @@
             this.hostList = new System.Windows.Forms.ListBox();
             this.communicationGrid = new System.Windows.Forms.DataGridView();
             this.dataGridViewTextBoxColumn2 = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.sNMPCommunicationsBindingSource = new System.Windows.Forms.BindingSource(this.components);
             this.timestampDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.hostnameDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.tipoDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.objetoDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.responseValueDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.sNMPCommunicationsBindingSource = new System.Windows.Forms.BindingSource(this.components);
             this.menuBar.SuspendLayout();
             this.mibListMenu.SuspendLayout();
             this.statusStrip1.SuspendLayout();
@@ -159,6 +159,7 @@
             this.statusStrip1.Location = new System.Drawing.Point(0, 340);
             this.statusStrip1.Name = "statusStrip1";
             this.statusStrip1.Size = new System.Drawing.Size(484, 22);
+            this.statusStrip1.SizingGrip = false;
             this.statusStrip1.TabIndex = 4;
             // 
             // statusbar
@@ -205,10 +206,6 @@
             this.dataGridViewTextBoxColumn2.Name = "dataGridViewTextBoxColumn2";
             this.dataGridViewTextBoxColumn2.ReadOnly = true;
             // 
-            // sNMPCommunicationsBindingSource
-            // 
-            this.sNMPCommunicationsBindingSource.DataSource = typeof(SNMPManager.SNMPCommunications);
-            // 
             // timestampDataGridViewTextBoxColumn
             // 
             this.timestampDataGridViewTextBoxColumn.DataPropertyName = "Timestamp";
@@ -249,6 +246,10 @@
             this.responseValueDataGridViewTextBoxColumn.ReadOnly = true;
             this.responseValueDataGridViewTextBoxColumn.Width = 59;
             // 
+            // sNMPCommunicationsBindingSource
+            // 
+            this.sNMPCommunicationsBindingSource.DataSource = typeof(SNMPManager.SNMPCommunications);
+            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -259,11 +260,13 @@
             this.Controls.Add(this.communicationGrid);
             this.Controls.Add(this.mibList);
             this.Controls.Add(this.menuBar);
+            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.MainMenuStrip = this.menuBar;
+            this.MaximizeBox = false;
             this.Name = "MainForm";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
-            this.Text = "SNMPManager - 2012";
+            this.Text = "SNMPManager";
             this.menuBar.ResumeLayout(false);
             this.menuBar.PerformLayout();
             this.mibListMenu.ResumeLayout(false);

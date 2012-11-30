@@ -1,21 +1,30 @@
 ﻿using System;
 using System.IO;
 using System.Text;
-using System.Globalization;
 using SnmpSharpNet;
 
 namespace SNMPManager
 {
+    /// <summary>
+    /// Singleton para realizar a escrita de logs da aplicação.
+    /// </summary>
     public sealed class Logger
     {
-        public readonly string FILENAME = "App.log";
-        private LogType LogType;
+        // Variáveis de instância
+        private StreamWriter writer;
 
+        // Variáveis estáticas
         private static volatile Logger instance;
         private static object syncRoot = new Object();
+        public static readonly string FILENAME = "App.log";
+        
+        private Logger() 
+        {
+            writer = new StreamWriter(AppDomain.CurrentDomain.BaseDirectory + FILENAME, true, Encoding.UTF8);
+            writer.AutoFlush = true; // Evita bufferizar dados
+        }
 
-        private Logger() { }
-
+        // Singleton
         public static Logger Self
         {
             get
@@ -33,53 +42,67 @@ namespace SNMPManager
             }
         }
 
+        /// <summary>
+        /// Escreve um texto arbitrário no arquivo de log
+        /// </summary>
+        public void Log(string text, LogType type)
+        {
+            writer.WriteLine(
+                string.Format("{0} | {1, -9} | {2}",
+                                DateTime.Now.ToString("u"),
+                                type,
+                                text
+                                )
+            );
+        }
+
+        /// <summary>
+        /// Escreve um texto arbitrário no arquivo de log
+        /// </summary>
         public void Log(string text)
         {
-            using (var writer = new StreamWriter(AppDomain.CurrentDomain.BaseDirectory + FILENAME, true, Encoding.UTF8))
-            {
-                writer.WriteLine(
-                    string.Format(  "{0} | {1, -9} | {2}",
-                                    DateTime.Now.ToString("u"),
-                                    LogType,
-                                    text
-                                 )
-                );
-            }
-            LogType = LogType.INFO;
+            Log(text, LogType.INFO);
         }
 
+        /// <summary>
+        /// Faz o logging de um SNMPRequest
+        /// </summary>
         internal void Log(SNMPRequest SNMPReq)
         {
-            var l = string.Format(  "{0,-21} | {1,-10} | {2}",
-                                    SNMPReq.Host.DisplayName,
-                                    SNMPReq.RequestPacket.Type,
-                                    SNMPReq.Object.DisplayName
+            var l = string.Format(  "{0,-21} | {1,-3} | {2}",
+                                    SNMPReq.Host,
+                                    SNMPReq.RequestData.Type,
+                                    SNMPReq.Object
                                  );
-            LogType = LogType.REQUEST;
-            this.Log(l);
+            this.Log(l, LogType.REQUEST);
         }
 
+        /// <summary>
+        /// Faz o logging do resultado de um SNMPRequest
+        /// </summary>
         internal void Log(Vb item)
         {
-            var l = string.Format("{0}",
-                                    item.Value
-                                 );
-            LogType = LogType.RESPONSE;
-            this.Log(l);
+            this.Log(item.Value.ToString(), LogType.RESPONSE);
         }
 
+        /// <summary>
+        /// Faz o logging de uma Exception
+        /// </summary>
         internal void Log(Exception ex)
         {
-            LogType = LogType.EXCEPTION;
-            this.Log(ex.Message);
+            this.Log(ex.Message, LogType.EXCEPTION);
         }
     }
 
-    internal enum LogType
+    /// <summary>
+    /// Classificação da mensagem de log
+    /// </summary>
+    public enum LogType
     {
         INFO,
         REQUEST,
         RESPONSE,
         EXCEPTION,
+        DISCOVERY
     }
 }

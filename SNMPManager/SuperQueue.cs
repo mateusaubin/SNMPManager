@@ -1,10 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Text;
 using System.Threading;
 
 namespace SNMPManager
 {
+    /// <summary>
+    /// Cria um número definido de Threads para trabalhar no modelo Produtor/Consumidor
+    /// </summary>
+    /// <remarks>
+    /// http://stackoverflow.com/a/5828863/251676
+    /// </remarks>
     public class SuperQueue<T> : IDisposable where T : class
     {
         readonly object _locker = new object();

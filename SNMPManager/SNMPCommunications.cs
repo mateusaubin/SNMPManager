@@ -1,10 +1,11 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using SnmpSharpNet;
 
 namespace SNMPManager
 {
+    /// <summary>
+    /// Wrapper para apresentar os dados na tela, uma vez 
+    /// que o DataGridView não permite certas operações
+    /// </summary>
     public class SNMPCommunications : SNMPRequest
     {
 
@@ -12,7 +13,7 @@ namespace SNMPManager
         {
             get
             {
-                return base.Host.DisplayName;
+                return base.Host.ToString();
             }
         }
 
@@ -20,7 +21,7 @@ namespace SNMPManager
         {
             get
             {
-                return base.RequestPacket.Type.ToString();
+                return base.RequestData.Type.ToString();
             }
         }
 
@@ -28,7 +29,7 @@ namespace SNMPManager
         {
             get
             {
-                return base.Object.DisplayName;
+                return base.Object.ToString();
             }
         }
 

@@ -1,25 +1,30 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace SNMPManager
 {
+    /// <summary>
+    /// Mapeia um Objeto da MIB
+    /// </summary>
     public class MibObject
     {
+        /// <summary>
+        /// OID do objeto
+        /// </summary>
         public string OID { get; set; }
 
+        /// <summary>
+        /// Nome do objeto
+        /// </summary>
         public string Name { get; set; }
 
-        public string Description { get; set; }
-
-        public string DisplayName
-        {
-            get
-            {
-                return string.IsNullOrEmpty(Name) ? OID : Name;
-            }
-        }
-
+        /// <summary>
+        /// Permite operações Set?
+        /// </summary>
         public bool CanSet { get; set; }
+
+        public override string ToString()
+        {
+            return string.IsNullOrEmpty(Name) ? OID : Name;
+        }
     }
 }

@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Text;
-using System.Windows.Forms;
+﻿using System.Windows.Forms;
 using SnmpSharpNet;
 
 namespace SNMPManager
@@ -59,6 +53,16 @@ namespace SNMPManager
         public MIBObjectSetForm()
         {
             InitializeComponent();
+        }
+
+        protected override bool ProcessCmdKey(ref Message msg, Keys keyData)
+        {
+            if (keyData == Keys.Escape)
+            {
+                DialogResult = System.Windows.Forms.DialogResult.Cancel;
+                this.Close();
+            }
+            return base.ProcessCmdKey(ref msg, keyData);
         }
 
         public enum DataType

@@ -6,11 +6,11 @@ using System.Runtime.InteropServices;
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
 [assembly: AssemblyTitle("SNMPManager")]
-[assembly: AssemblyDescription("")]
+[assembly: AssemblyDescription("Gerenciador SNMP desenvolvido para a disciplina de Gerência de Redes da Universidade do Vale do Rio dos Sinos.")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("Microsoft")]
+[assembly: AssemblyCompany("Bruno Schmidt Marques, Mateus Rauback Aubin")]
 [assembly: AssemblyProduct("SNMPManager")]
-[assembly: AssemblyCopyright("Copyright © Microsoft 2012")]
+[assembly: AssemblyCopyright("https://github.com/mateusaubin/SNMPManager#readme")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 

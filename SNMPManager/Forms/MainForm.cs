@@ -1,11 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Text;
 using System.Windows.Forms;
-using SnmpSharpNet;
 
 namespace SNMPManager
 {
@@ -77,10 +72,8 @@ namespace SNMPManager
             communicationGrid.DataSource = SNMPCommunications;
 
             mibList.DataSource = MIBObjects;
-            mibList.DisplayMember = "DisplayName";
 
             hostList.DataSource = Hosts;
-            hostList.DisplayMember = "DisplayName";
         }
 
         /// <summary>
@@ -109,7 +102,7 @@ namespace SNMPManager
         private void mibList_UpdateStatusBar(object sender, EventArgs e)
         {
             if (SelectedMibObject != null)
-                statusbar.Text = string.Format("{0} ({1})", SelectedMibObject.DisplayName, SelectedMibObject.OID);
+                statusbar.Text = string.Format("{0} ({1})", SelectedMibObject, SelectedMibObject.OID);
             else
                 statusbar.Text = string.Empty;
         }
@@ -123,7 +116,10 @@ namespace SNMPManager
             {
                 int index = mibList.IndexFromPoint(e.Location);
                 if (index != ListBox.NoMatches)
+                {
                     mibList.SelectedIndex = index;
+                    mibList_UpdateStatusBar(null, null);
+                }
             }
 
         }
@@ -134,7 +130,7 @@ namespace SNMPManager
         private void hostList_UpdateStatusBar(object sender, EventArgs e)
         {
             if (SelectedHost != null)
-                statusbar.Text = string.Format("{0} ({1}:{2})", SelectedHost.DisplayName, SelectedHost.IP, SelectedHost.Port);
+                statusbar.Text = string.Format("{0} ({1}:{2})", SelectedHost, SelectedHost.IP, SelectedHost.Port);
             else
                 statusbar.Text = string.Empty;
         }
@@ -182,7 +178,7 @@ namespace SNMPManager
                 if (SelectedHost != null)
                     Hosts.Remove(SelectedHost);
                 else
-                    MessageBox.Show("Por favor, selecione um host para remover", "Erro", MessageBoxButtons.OK);
+                    MessageBox.Show("Por favor, selecione um host para remover", "Erro", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
             }
             hostList_UpdateStatusBar(null, null);
             hostList.Focus();
@@ -203,7 +199,7 @@ namespace SNMPManager
         {
             if (SelectedHost == null || SelectedMibObject == null)
             {
-                MessageBox.Show("Por favor, selecione um Host e um Objeto da MIB", "Erro", MessageBoxButtons.OK);
+                MessageBox.Show("Por favor, selecione um Host e um Objeto da MIB", "Erro", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
             }
             else
             {
@@ -227,7 +223,7 @@ namespace SNMPManager
         {
             if (SelectedHost == null || SelectedMibObject == null)
             {
-                MessageBox.Show("Por favor, selecione um Host e um Objeto da MIB", "Erro", MessageBoxButtons.OK);
+                MessageBox.Show("Por favor, selecione um Host e um Objeto da MIB", "Erro", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
             }
             else
             {
@@ -270,8 +266,15 @@ namespace SNMPManager
             using (var autoDisc = new AutoDiscoveryForm())
             {
                 var result = autoDisc.ShowDialog(this);
-                foreach (var item in autoDisc.Hosts)
-                    this.Hosts.Add(item);
+
+                if (autoDisc.Hosts != null && autoDisc.Hosts.Count > 0)
+                {
+                    foreach (var item in autoDisc.Hosts)
+                        this.Hosts.Add(item);
+
+                    hostList_UpdateStatusBar(null, null);
+                    hostList.Focus();
+                }
             }
         }
     }
