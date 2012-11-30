@@ -32,8 +32,11 @@
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainForm));
             this.menuBar = new System.Windows.Forms.MenuStrip();
             this.toolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
+            this.autodescobertaToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.adicionarToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.removerToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.resultadosToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.limparToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.mibList = new System.Windows.Forms.ListBox();
             this.mibListMenu = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.getToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -43,15 +46,12 @@
             this.hostList = new System.Windows.Forms.ListBox();
             this.communicationGrid = new System.Windows.Forms.DataGridView();
             this.dataGridViewTextBoxColumn2 = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.resultadosToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.limparToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.autodescobertaToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.sNMPCommunicationsBindingSource = new System.Windows.Forms.BindingSource(this.components);
             this.timestampDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.hostnameDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.tipoDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.objetoDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.responseValueDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.sNMPCommunicationsBindingSource = new System.Windows.Forms.BindingSource(this.components);
             this.menuBar.SuspendLayout();
             this.mibListMenu.SuspendLayout();
             this.statusStrip1.SuspendLayout();
@@ -81,6 +81,13 @@
             this.toolStripMenuItem1.Size = new System.Drawing.Size(49, 20);
             this.toolStripMenuItem1.Text = "Hosts";
             // 
+            // autodescobertaToolStripMenuItem
+            // 
+            this.autodescobertaToolStripMenuItem.Name = "autodescobertaToolStripMenuItem";
+            this.autodescobertaToolStripMenuItem.Size = new System.Drawing.Size(158, 22);
+            this.autodescobertaToolStripMenuItem.Text = "Autodescoberta";
+            this.autodescobertaToolStripMenuItem.Click += new System.EventHandler(this.autodescobertaToolStripMenuItem_Click);
+            // 
             // adicionarToolStripMenuItem
             // 
             this.adicionarToolStripMenuItem.Name = "adicionarToolStripMenuItem";
@@ -94,6 +101,21 @@
             this.removerToolStripMenuItem.Size = new System.Drawing.Size(158, 22);
             this.removerToolStripMenuItem.Text = "Remover";
             this.removerToolStripMenuItem.Click += new System.EventHandler(this.removerToolStripMenuItem_Click);
+            // 
+            // resultadosToolStripMenuItem
+            // 
+            this.resultadosToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.limparToolStripMenuItem});
+            this.resultadosToolStripMenuItem.Name = "resultadosToolStripMenuItem";
+            this.resultadosToolStripMenuItem.Size = new System.Drawing.Size(76, 20);
+            this.resultadosToolStripMenuItem.Text = "Resultados";
+            // 
+            // limparToolStripMenuItem
+            // 
+            this.limparToolStripMenuItem.Name = "limparToolStripMenuItem";
+            this.limparToolStripMenuItem.Size = new System.Drawing.Size(111, 22);
+            this.limparToolStripMenuItem.Text = "Limpar";
+            this.limparToolStripMenuItem.Click += new System.EventHandler(this.limparToolStripMenuItem_Click);
             // 
             // mibList
             // 
@@ -128,6 +150,7 @@
             this.setToolStripMenuItem.Name = "setToolStripMenuItem";
             this.setToolStripMenuItem.Size = new System.Drawing.Size(92, 22);
             this.setToolStripMenuItem.Text = "Set";
+            this.setToolStripMenuItem.Click += new System.EventHandler(this.setToolStripMenuItem_Click);
             // 
             // statusStrip1
             // 
@@ -182,27 +205,9 @@
             this.dataGridViewTextBoxColumn2.Name = "dataGridViewTextBoxColumn2";
             this.dataGridViewTextBoxColumn2.ReadOnly = true;
             // 
-            // resultadosToolStripMenuItem
+            // sNMPCommunicationsBindingSource
             // 
-            this.resultadosToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.limparToolStripMenuItem});
-            this.resultadosToolStripMenuItem.Name = "resultadosToolStripMenuItem";
-            this.resultadosToolStripMenuItem.Size = new System.Drawing.Size(76, 20);
-            this.resultadosToolStripMenuItem.Text = "Resultados";
-            // 
-            // limparToolStripMenuItem
-            // 
-            this.limparToolStripMenuItem.Name = "limparToolStripMenuItem";
-            this.limparToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
-            this.limparToolStripMenuItem.Text = "Limpar";
-            this.limparToolStripMenuItem.Click += new System.EventHandler(this.limparToolStripMenuItem_Click);
-            // 
-            // autodescobertaToolStripMenuItem
-            // 
-            this.autodescobertaToolStripMenuItem.Name = "autodescobertaToolStripMenuItem";
-            this.autodescobertaToolStripMenuItem.Size = new System.Drawing.Size(158, 22);
-            this.autodescobertaToolStripMenuItem.Text = "Autodescoberta";
-            this.autodescobertaToolStripMenuItem.Click += new System.EventHandler(this.autodescobertaToolStripMenuItem_Click);
+            this.sNMPCommunicationsBindingSource.DataSource = typeof(SNMPManager.SNMPCommunications);
             // 
             // timestampDataGridViewTextBoxColumn
             // 
@@ -239,14 +244,10 @@
             // responseValueDataGridViewTextBoxColumn
             // 
             this.responseValueDataGridViewTextBoxColumn.DataPropertyName = "ResponseValue";
-            this.responseValueDataGridViewTextBoxColumn.HeaderText = "ResponseValue";
+            this.responseValueDataGridViewTextBoxColumn.HeaderText = "Value";
             this.responseValueDataGridViewTextBoxColumn.Name = "responseValueDataGridViewTextBoxColumn";
             this.responseValueDataGridViewTextBoxColumn.ReadOnly = true;
-            this.responseValueDataGridViewTextBoxColumn.Width = 107;
-            // 
-            // sNMPCommunicationsBindingSource
-            // 
-            this.sNMPCommunicationsBindingSource.DataSource = typeof(SNMPManager.SNMPCommunications);
+            this.responseValueDataGridViewTextBoxColumn.Width = 59;
             // 
             // MainForm
             // 
@@ -291,14 +292,14 @@
         private System.Windows.Forms.DataGridView communicationGrid;
         private System.Windows.Forms.DataGridViewTextBoxColumn hostDataGridViewTextBoxColumn;
         private System.Windows.Forms.BindingSource sNMPCommunicationsBindingSource;
+        private System.Windows.Forms.DataGridViewTextBoxColumn dataGridViewTextBoxColumn2;
+        private System.Windows.Forms.ToolStripMenuItem resultadosToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem limparToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem autodescobertaToolStripMenuItem;
         private System.Windows.Forms.DataGridViewTextBoxColumn timestampDataGridViewTextBoxColumn;
         private System.Windows.Forms.DataGridViewTextBoxColumn hostnameDataGridViewTextBoxColumn;
         private System.Windows.Forms.DataGridViewTextBoxColumn tipoDataGridViewTextBoxColumn;
         private System.Windows.Forms.DataGridViewTextBoxColumn objetoDataGridViewTextBoxColumn;
         private System.Windows.Forms.DataGridViewTextBoxColumn responseValueDataGridViewTextBoxColumn;
-        private System.Windows.Forms.DataGridViewTextBoxColumn dataGridViewTextBoxColumn2;
-        private System.Windows.Forms.ToolStripMenuItem resultadosToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem limparToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem autodescobertaToolStripMenuItem;
     }
 }

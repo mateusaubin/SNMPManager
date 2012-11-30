@@ -38,7 +38,7 @@ namespace SNMPManager
             using (var writer = new StreamWriter(AppDomain.CurrentDomain.BaseDirectory + FILENAME, true, Encoding.UTF8))
             {
                 writer.WriteLine(
-                    string.Format(  "{0} | {1, -8} | {2}",
+                    string.Format(  "{0} | {1, -9} | {2}",
                                     DateTime.Now.ToString("u"),
                                     LogType,
                                     text
@@ -67,12 +67,19 @@ namespace SNMPManager
             LogType = LogType.RESPONSE;
             this.Log(l);
         }
+
+        internal void Log(Exception ex)
+        {
+            LogType = LogType.EXCEPTION;
+            this.Log(ex.Message);
+        }
     }
 
     internal enum LogType
     {
         INFO,
         REQUEST,
-        RESPONSE
+        RESPONSE,
+        EXCEPTION,
     }
 }

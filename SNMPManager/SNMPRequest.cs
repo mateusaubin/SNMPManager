@@ -7,7 +7,7 @@ namespace SNMPManager
 {
     public class SNMPRequest
     {
-        public static readonly int TIMEOUT = 2500;
+        public static readonly int TIMEOUT = 1000;
 
         public DateTime Timestamp { get; protected set; }
 
@@ -21,51 +21,52 @@ namespace SNMPManager
 
         public object ResponseValue { get; protected set; }
 
-        public SNMPRequest(SNMPHost host, PduType type, MibObject obj)
+        public SNMPRequest(SNMPHost host, MibObject obj)
         {
             Host = host;
-            RequestPacket = new Pdu(type);
             Object = obj;
         }
 
         public void Send()
         {
+            Send(null);
+        }
+
+        public void Send(AsnType setValue)
+        {
             using (var target = new UdpTarget(Host.IP, Host.Port, TIMEOUT, 0))
             {
                 var agentp = new AgentParameters(SnmpVersion.Ver2, new OctetString(Host.Community));
+                var oid = new Oid(Object.OID + ".0");
+                RequestPacket = new Pdu(setValue == null ? PduType.Get : PduType.Set);
+
                 switch (RequestPacket.Type)
                 {
                     case PduType.Get:
-                        RequestPacket.VbList.Add(new Oid(Object.OID + ".0"));
+                        RequestPacket.VbList.Add(oid);
                         break;
                     case PduType.Set:
-                        // TODO: Implementar Set
-                        throw new NotImplementedException();
+                        RequestPacket.VbList.Add(oid, setValue);
                         break;
                     default:
-                        break;
+                        throw new InvalidOperationException("unsupported");
                 }
                 Logger.Self.Log(this);
                 Timestamp = DateTime.Now;
                 try
                 {
                     ResponsePacket = target.Request(RequestPacket, agentp) as SnmpV2Packet;
+                    if (ResponsePacket != null && ResponsePacket.Pdu.ErrorStatus == 0)
+                    {
+                        var item = ResponsePacket.Pdu.VbList[0];
+                        ResponseValue = item.Value;
+                        Logger.Self.Log(item);
+                    }
                 }
-                catch (Exception)
+                catch (Exception ex)
                 {
-                    ResponsePacket = null;
-                }
-
-                if (ResponsePacket != null && ResponsePacket.Pdu.ErrorStatus == 0)
-                {
-                    var item = ResponsePacket.Pdu.VbList[0];
-                    ResponseValue = item.Value;
-                    Logger.Self.Log(item);
-                }
-                else
-                {
-                    // TODO: Tratar Erros
-                    throw new Exception();
+                    Logger.Self.Log(ex);
+                    throw new SnmpException("Não foi possível realizar a operação");
                 }
             }
         }

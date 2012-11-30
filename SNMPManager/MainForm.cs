@@ -207,9 +207,46 @@ namespace SNMPManager
             }
             else
             {
-                var req = new SNMPCommunications(SelectedHost, PduType.Get, SelectedMibObject);
+                var req = new SNMPCommunications(SelectedHost, SelectedMibObject);
                 req.Send();
                 SNMPCommunications.Add(req);
+            }
+        }
+
+        /// <summary>
+        /// Trata a operação de Set de um objeto da MIB sobre um Host
+        /// </summary>
+        private void setToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if (SelectedHost == null || SelectedMibObject == null)
+            {
+                MessageBox.Show("Por favor, selecione um Host e um Objeto da MIB", "Erro", MessageBoxButtons.OK);
+            }
+            else
+            {
+                using (var setValue = new MIBObjectSetForm())
+                {
+                    var result = setValue.ShowDialog(this);
+                    switch (result)
+                    {
+                        case DialogResult.OK:
+                            try
+                            {
+                                var req = new SNMPCommunications(SelectedHost, SelectedMibObject);
+                                req.Send(setValue.ConvertedValue());
+                                SNMPCommunications.Add(req);
+                            }
+                            catch (Exception ex)
+                            {
+                                MessageBox.Show(ex.Message, "Erro", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                            }
+                            break;
+                        case DialogResult.Cancel:
+                            break;
+                        default:
+                            break;
+                    }
+                }
             }
         }
 

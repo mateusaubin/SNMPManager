@@ -32,8 +32,8 @@ namespace SNMPManager
             }
         }
 
-        public SNMPCommunications(SNMPHost host, PduType type, MibObject obj)
-            : base(host, type, obj)
+        public SNMPCommunications(SNMPHost host, MibObject obj)
+            : base(host, obj)
         { }
     }
 }
