@@ -62,6 +62,12 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AutoDiscoveryForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="AutoDiscoveryForm.Designer.cs">
+      <DependentUpon>AutoDiscoveryForm.cs</DependentUpon>
+    </Compile>
     <Compile Include="HostAddForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -87,6 +93,10 @@
     <Compile Include="SNMPCommunications.cs" />
     <Compile Include="SNMPHost.cs" />
     <Compile Include="SNMPRequest.cs" />
+    <Compile Include="SuperQueue.cs" />
+    <EmbeddedResource Include="AutoDiscoveryForm.resx">
+      <DependentUpon>AutoDiscoveryForm.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="HostAddForm.resx">
       <DependentUpon>HostAddForm.cs</DependentUpon>
     </EmbeddedResource>

@@ -208,8 +208,15 @@ namespace SNMPManager
             else
             {
                 var req = new SNMPCommunications(SelectedHost, SelectedMibObject);
-                req.Send();
-                SNMPCommunications.Add(req);
+                try
+                {
+                    req.Send();
+                    SNMPCommunications.Add(req);
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show(ex.Message, "Erro", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
             }
         }
 
@@ -260,7 +267,12 @@ namespace SNMPManager
 
         private void autodescobertaToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            throw new NotImplementedException();
+            using (var autoDisc = new AutoDiscoveryForm())
+            {
+                var result = autoDisc.ShowDialog(this);
+                foreach (var item in autoDisc.Hosts)
+                    this.Hosts.Add(item);
+            }
         }
     }
 }

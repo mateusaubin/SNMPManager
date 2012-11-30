@@ -47,7 +47,7 @@ namespace SNMPManager
         {
             get
             {
-                return txtCommunity.Text.Trim();
+                return string.IsNullOrEmpty(txtCommunity.Text) ? null : txtCommunity.Text.Trim();
             }
         }
 
