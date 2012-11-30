@@ -45,6 +45,7 @@ namespace SNMPManager
                     default:
                         break;
                 }
+                Logger.Self.Log(this);
                 Timestamp = DateTime.Now;
                 try
                 {
@@ -59,7 +60,7 @@ namespace SNMPManager
                 {
                     var item = ResponsePacket.Pdu.VbList[0];
                     ResponseValue = item.Value;
-                    //string.Format("Oid: {0}| Type: {1}| Value: {2}", item.Oid, item.Type, item.Value);
+                    Logger.Self.Log(item);
                 }
                 else
                 {

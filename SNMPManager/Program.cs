@@ -15,9 +15,11 @@ namespace SNMPManager
         [STAThread]
         static void Main()
         {
+            Logger.Self.Log("Inicializando Aplicação");
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
             Application.Run(new MainForm());
+            Logger.Self.Log("Finalizando Aplicação");
         }
     }
 }

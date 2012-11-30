@@ -11,12 +11,24 @@ namespace SNMPManager
 {
     public partial class MainForm : Form
     {
+        /// <summary>
+        /// Objetos da MIB disponíveis para consulta
+        /// </summary>
         public BindingList<MibObject> MIBObjects { get; protected set; }
 
+        /// <summary>
+        /// Hosts disponíveis para consulta
+        /// </summary>
         public BindingList<SNMPHost> Hosts { get; protected set; }
 
+        /// <summary>
+        /// Histórico de comunicação
+        /// </summary>
         public BindingList<SNMPCommunications> SNMPCommunications { get; protected set; }
 
+        /// <summary>
+        /// Objeto da MIB selecionado atualmente
+        /// </summary>
         public MibObject SelectedMibObject
         {
             get
@@ -25,6 +37,9 @@ namespace SNMPManager
             }
         }
 
+        /// <summary>
+        /// Host selecionado atualmente
+        /// </summary>
         public SNMPHost SelectedHost
         {
             get
@@ -33,6 +48,9 @@ namespace SNMPManager
             }
         }
 
+        /// <summary>
+        /// Construtor
+        /// </summary>
         public MainForm()
         {
             InitializeComponent();
@@ -41,6 +59,9 @@ namespace SNMPManager
             Clear();
         }
 
+        /// <summary>
+        /// Limpa os defaults
+        /// </summary>
         private void Clear()
         {
             statusbar.Text = string.Empty;
@@ -48,6 +69,9 @@ namespace SNMPManager
             hostList.ClearSelected();
         }
 
+        /// <summary>
+        /// Associa as coleções aos controles de tela
+        /// </summary>
         private void DataBind()
         {
             communicationGrid.DataSource = SNMPCommunications;
@@ -59,6 +83,9 @@ namespace SNMPManager
             hostList.DisplayMember = "DisplayName";
         }
 
+        /// <summary>
+        /// Inicializa as coleções
+        /// </summary>
         private void InitializeDataStructures()
         {
             SNMPCommunications = new BindingList<SNMPCommunications>();
@@ -66,6 +93,7 @@ namespace SNMPManager
             Hosts = new BindingList<SNMPHost>();
 
             // MIB-II
+            MIBObjects.Add(new MibObject() { OID = "1.3.6.1.2.1.1.5", Name = "sysName" });
             MIBObjects.Add(new MibObject() { OID = "1.3.6.1.2.1.1.6", Name = "sysLocation", CanSet = true });
             MIBObjects.Add(new MibObject() { OID = "1.3.6.1.2.1.1.3", Name = "sysUpTime" });
             MIBObjects.Add(new MibObject() { OID = "1.3.6.1.2.1.25.1.6", Name = "hrSystemProcesses" });
@@ -75,6 +103,9 @@ namespace SNMPManager
             MIBObjects.Add(new MibObject() { OID = "1.3.6.1.4.1.1.6", Name = "filesystemCount" });
         }
 
+        /// <summary>
+        /// Mostra detalhes de um Objeto da MIB na StatusBar
+        /// </summary>
         private void mibList_UpdateStatusBar(object sender, EventArgs e)
         {
             if (SelectedMibObject != null)
@@ -83,6 +114,9 @@ namespace SNMPManager
                 statusbar.Text = string.Empty;
         }
 
+        /// <summary>
+        /// Habilita a seleção de um objeto da MIB com o botão direito
+        /// </summary>
         private void mibList_RightClick(object sender, MouseEventArgs e)
         {
             if (e.Button == MouseButtons.Right)
@@ -94,6 +128,9 @@ namespace SNMPManager
 
         }
 
+        /// <summary>
+        /// Mostra detalhes de um Host na StatusBar
+        /// </summary>
         private void hostList_UpdateStatusBar(object sender, EventArgs e)
         {
             if (SelectedHost != null)
@@ -102,6 +139,9 @@ namespace SNMPManager
                 statusbar.Text = string.Empty;
         }
 
+        /// <summary>
+        /// Trata a operação de Adicionar Host
+        /// </summary>
         private void adicionarToolStripMenuItem_Click(object sender, EventArgs e)
         {
             using (var hostAdd = new HostAddForm())
@@ -132,6 +172,9 @@ namespace SNMPManager
             }
         }
 
+        /// <summary>
+        /// Trata a operação de Remover Host
+        /// </summary>
         private void removerToolStripMenuItem_Click(object sender, EventArgs e)
         {
             if (Hosts.Count > 0)
@@ -145,11 +188,17 @@ namespace SNMPManager
             hostList.Focus();
         }
 
+        /// <summary>
+        /// Controla se a operação Set está disponível para um objeto da MIB
+        /// </summary>
         private void mibListMenu_Opening(object sender, CancelEventArgs e)
         {
             mibListMenu.Items[1].Enabled = SelectedMibObject.CanSet;
         }
 
+        /// <summary>
+        /// Trata a operação de Get de um objeto da MIB sobre um Host
+        /// </summary>
         private void getToolStripMenuItem_Click(object sender, EventArgs e)
         {
             if (SelectedHost == null || SelectedMibObject == null)
@@ -162,6 +211,19 @@ namespace SNMPManager
                 req.Send();
                 SNMPCommunications.Add(req);
             }
+        }
+
+        /// <summary>
+        /// Limpa os registros da tabela
+        /// </summary>
+        private void limparToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            SNMPCommunications.Clear();
+        }
+
+        private void autodescobertaToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            throw new NotImplementedException();
         }
     }
 }
