@@ -175,10 +175,10 @@ namespace SNMPManager
         {
             if (Hosts.Count > 0)
             {
-                if (SelectedHost != null)
-                    Hosts.Remove(SelectedHost);
-                else
-                    MessageBox.Show("Por favor, selecione um host para remover", "Erro", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                if (!ValidaHostSelecionado())
+                    return;
+
+                Hosts.Remove(SelectedHost);
             }
             hostList_UpdateStatusBar(null, null);
             hostList.Focus();
@@ -197,22 +197,18 @@ namespace SNMPManager
         /// </summary>
         private void getToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            if (SelectedHost == null || SelectedMibObject == null)
+            if (!ValidaHostSelecionado())
+                return;
+
+            var req = new SNMPCommunications(SelectedHost, SelectedMibObject);
+            try
             {
-                MessageBox.Show("Por favor, selecione um Host e um Objeto da MIB", "Erro", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                req.Send();
+                SNMPCommunications.Add(req);
             }
-            else
+            catch (Exception ex)
             {
-                var req = new SNMPCommunications(SelectedHost, SelectedMibObject);
-                try
-                {
-                    req.Send();
-                    SNMPCommunications.Add(req);
-                }
-                catch (Exception ex)
-                {
-                    MessageBox.Show(ex.Message, "Erro", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                }
+                MessageBox.Show(ex.Message, "Erro", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
 
@@ -221,34 +217,30 @@ namespace SNMPManager
         /// </summary>
         private void setToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            if (SelectedHost == null || SelectedMibObject == null)
+            if (!ValidaHostSelecionado())
+                return;
+
+            using (var setValue = new MIBObjectSetForm())
             {
-                MessageBox.Show("Por favor, selecione um Host e um Objeto da MIB", "Erro", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
-            }
-            else
-            {
-                using (var setValue = new MIBObjectSetForm())
+                var result = setValue.ShowDialog(this);
+                switch (result)
                 {
-                    var result = setValue.ShowDialog(this);
-                    switch (result)
-                    {
-                        case DialogResult.OK:
-                            try
-                            {
-                                var req = new SNMPCommunications(SelectedHost, SelectedMibObject);
-                                req.Send(setValue.ConvertedValue());
-                                SNMPCommunications.Add(req);
-                            }
-                            catch (Exception ex)
-                            {
-                                MessageBox.Show(ex.Message, "Erro", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                            }
-                            break;
-                        case DialogResult.Cancel:
-                            break;
-                        default:
-                            break;
-                    }
+                    case DialogResult.OK:
+                        try
+                        {
+                            var req = new SNMPCommunications(SelectedHost, SelectedMibObject);
+                            req.Send(setValue.ConvertedValue());
+                            SNMPCommunications.Add(req);
+                        }
+                        catch (Exception ex)
+                        {
+                            MessageBox.Show(ex.Message, "Erro", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        }
+                        break;
+                    case DialogResult.Cancel:
+                        break;
+                    default:
+                        break;
                 }
             }
         }
@@ -276,6 +268,89 @@ namespace SNMPManager
                     hostList.Focus();
                 }
             }
+        }
+
+        private void isAliveToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            this.AddMonitoringEvent(MonitorKind.IsAlive);
+        }
+
+        private void AddMonitoringEvent(MonitorKind monitorKind)
+        {
+            if (!ValidaHostSelecionado())
+                return;
+
+            if (SelectedHost.AddMonitoringEvent(monitorKind))
+            {
+                // Insere na lista de hosts monitorados
+                lstMonitorados.Items.Add(string.Format("{0}: {1}", monitorKind, SelectedHost));
+            }
+
+            // Habilita timer
+            if (!tmrMonitor.Enabled)
+            {
+                tmrMonitor.Enabled = true;
+
+                // Força a primeira execução
+                //tmrMonitor_Tick(null, null);
+            }
+        }
+
+        private bool ValidaHostSelecionado()
+        {
+            bool isSelected = SelectedHost != null;
+
+            if (!isSelected)
+                MessageBox.Show("Por favor, selecione um Host.", "Atenção", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+
+            return isSelected;
+        }
+
+        private void tmrMonitor_Tick(object sender, EventArgs e)
+        {
+            var list = lstMonitoringLog;
+            var code = new Action<string>((v) => { list.Items.Add(string.Format("{0} - {1}", DateTime.Now, v)); list.TopIndex = list.Items.Count - 1; });
+            string msg = "Monitorando...";
+
+            if (list.InvokeRequired)
+                list.Invoke(code, msg);
+            else
+                code.Invoke(msg);
+
+
+            if (!bwMonitor.IsBusy)
+                bwMonitor.RunWorkerAsync();
+        }
+
+        private void bwMonitor_DoWork(object sender, DoWorkEventArgs e)
+        {
+            var worker = sender as BackgroundWorker;
+            if (worker == null)
+                throw new Exception("Aconteceu algo com o BackgroundWorker");
+
+            var list = lstMonitoringLog;
+            var code = new Action<MonitorEvent>((v) => { list.Items.Add(v); list.TopIndex = list.Items.Count - 1; });
+
+            // TODO: Corrigir o problema do Enumerator quando remove um host da collection original
+            var hostsCopy = new SNMPHost[Hosts.Count];
+            Hosts.CopyTo(hostsCopy, 0);
+
+            // Executa o Monitor passando todos os Hosts
+            foreach (var evt in SNMPMonitor.Instance.Exec(hostsCopy))
+            {
+                if (list.InvokeRequired)
+                    list.Invoke(code, evt);
+                else
+                    code.Invoke(evt);
+            }
+        }
+
+        private void pararToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            tmrMonitor.Enabled = false;
+            foreach (var host in Hosts)
+                host.MonitoredEvents.Clear();
+            lstMonitorados.Items.Clear();
         }
     }
 }

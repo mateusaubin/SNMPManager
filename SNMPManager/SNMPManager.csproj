@@ -88,12 +88,15 @@
     <Compile Include="Forms\MIBObjectSetForm.Designer.cs">
       <DependentUpon>MIBObjectSetForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="MonitorEvent.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SNMPCommunications.cs" />
     <Compile Include="SNMPHost.cs" />
+    <Compile Include="SNMPMonitor.cs" />
     <Compile Include="SNMPRequest.cs" />
     <Compile Include="SuperQueue.cs" />
+    <Compile Include="Utils.cs" />
     <EmbeddedResource Include="Forms\AutoDiscoveryForm.resx">
       <DependentUpon>AutoDiscoveryForm.cs</DependentUpon>
     </EmbeddedResource>

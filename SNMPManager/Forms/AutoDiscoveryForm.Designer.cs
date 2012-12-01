@@ -75,7 +75,7 @@
             this.txtIPIni.Name = "txtIPIni";
             this.txtIPIni.Size = new System.Drawing.Size(100, 20);
             this.txtIPIni.TabIndex = 5;
-            this.txtIPIni.Text = "192.168.25.1";
+            this.txtIPIni.Text = "10.16.169.1";
             // 
             // txtIPFin
             // 
@@ -83,7 +83,7 @@
             this.txtIPFin.Name = "txtIPFin";
             this.txtIPFin.Size = new System.Drawing.Size(100, 20);
             this.txtIPFin.TabIndex = 7;
-            this.txtIPFin.Text = "192.168.25.254";
+            this.txtIPFin.Text = "10.16.169.30";
             // 
             // label2
             // 

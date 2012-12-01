@@ -16,6 +16,9 @@ namespace SNMPManager
         /// </summary>
         public static readonly ushort DEFAULT_TIMEOUT = 500;
 
+        /// <summary>
+        /// Número padrão de tentativas em caso de erro
+        /// </summary>
         public static readonly byte DEFAULT_RETRIES = 1;
 
         /// <summary>
@@ -56,12 +59,12 @@ namespace SNMPManager
         /// <summary>
         /// Host SNMP alvo da requisição
         /// </summary>
-        public SNMPHost Host { get; set; }
+        public SNMPHost Host { get; protected set; }
 
         /// <summary>
         /// Objeto da MIB requisitado
         /// </summary>
-        public MibObject Object { get; set; }
+        public MibObject Object { get; protected set; }
 
         /// <summary>
         /// Pacote de Requisição
@@ -76,7 +79,7 @@ namespace SNMPManager
         /// <summary>
         /// Valor da Resposta
         /// </summary>
-        public object ResponseValue { get; protected set; }
+        public AsnType ResponseValue { get; protected set; }
 
         /// <summary>
         /// Deve gravar logs?
@@ -87,6 +90,7 @@ namespace SNMPManager
         {
             Host = host;
             Object = obj;
+            LogRequests = true;
         }
 
         /// <summary>
